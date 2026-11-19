@@ -1,8 +1,8 @@
 # The World Today — 18 November 2026 front page (v3)
 
-![make.fun](https://make.fun/badge/owner/Maftuuh1922)
-![make.fun](https://make.fun/badge/competition/news-image-20261118)
-![make.fun](https://make.fun/badge/entry/Maftuuh1922/news-image-20261118)
+[![make.fun · news-image-20261118](https://make.fun/badge/news-image-20261118.svg)](https://make.fun/bounty/news-image-20261118?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261118)
+[![rank](https://make.fun/badge/news-image-20261118/Maftuuh1922/news-image-20261118/rank.svg)](https://make.fun/bounty/news-image-20261118/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261118)
+[![reward](https://make.fun/badge/news-image-20261118/Maftuuh1922/news-image-20261118/reward.svg)](https://make.fun/bounty/news-image-20261118?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261118)
 
 One image that sums up Wednesday 18 November 2026: a newspaper front page
 with **43 verified stories from six continents** — a lead on the widening
