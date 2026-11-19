@@ -25,8 +25,9 @@ line naming what was deliberately left out.
 ## Reproduce it
 
 ```bash
-bun main.ts
-# [news-image] wrote entry.png (204808 bytes, 1024x1024)
+python3 render.py entry.png   # draw the page (deterministic: same bytes every run)
+mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
+# wrote out/entry.png (204808 bytes)
 ```
 
 ## Why v3
