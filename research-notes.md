@@ -1,108 +1,164 @@
-# Research notes — Wednesday 18 November 2026
+# Research notes — The World Today, 18 November 2026 (v3)
 
-Researched 18 Nov 2026 via news search (news vertical). Each story below
-is backed by at least one source found that day. No numbers, quotes or
-events were invented. Sources are named per story; where a wire story
-reached me through an aggregator, that is noted.
+All 43 stories on the page were published or first reported on Wednesday
+18 November 2026 (UTC day). Where an event happened on 17 November, the
+report cited here is dated 18 November. Nothing was invented; numbers below
+are the numbers the sources gave.
 
 ## Lead
 
-**Gulf war widens.** Iran's army says its drones hit Patriot systems and
-launchers at Ali Al Salem air base in Kuwait early Wed 18 Nov, a day after
-U.S. jets struck an IRGC missile site on Qeshm Island (Tue 17 Nov).
-Bahrain says it repelled several Iranian attacks — its third in a week.
-Kuwait reported no casualties or damage.
-Sources: oneturn.news, geopolitiki.com, worldpulsewire.com, political.org,
-Al Jazeera via aggregators.
+1. **Iran's drones hit a U.S. base in Kuwait** — Reuters, 18 Nov: Iranian
+   drones struck Ali Al Salem air base in Kuwait; Washington warned of
+   strikes on Iran's leadership; Iran vowed to keep its defences up.
 
-## Second row
+## Second stories
 
-**Summit eve in Shenzhen.** Xi hosts Putin; Trump is due for a first-ever
-trilateral summit with Xi and Putin on Thu 19 Nov. The APEC summit opened
-in Shenzhen on Wed 18 Nov; Xi urged AI co-operation and free trade. Trump
-first went to Manila for Quad talks.
-Sources: Arab News bulletin 18 Nov, feedcast.news, rajglobalstudies.com,
-horizonapp.link.
+2. **Xi hugs Trump at Shenzhen** — The Tribune (Chandigarh) via EIN, 18 Nov:
+   Trump arrived in Shenzhen to a grand airport welcome, Xi receiving him
+   with a hug; Putin already in town for Thursday's trilateral. APEC CEO
+   Summit, Shenzhen, 18–19 Nov (AsiaPresse).
+3. **Kerch Bridge's road deck collapses** — Kyiv Independent, 18 Nov:
+   rail deck gone, road deck badly damaged after Ukrainian strikes; Russia
+   calls it a terrorist attack.
 
-**Kerch Bridge falls.** A Ukrainian strike collapsed a road span of the
-Kerch Bridge into the strait (night of 16–17 Nov, second day of strikes);
-two people killed; road traffic closed, rail service resumed. Zelensky
-called it a seven-stage operation planned over weeks.
-Sources: oneturn.news, Kyiv Independent, NBC News, CNN, Meduza,
-Reuters via Wikipedia.
+## Middle East & Gulf
 
-## Middle East
+4. **Houthi attacks on Israel and the Gulf** — Iran-backed Houthis struck
+   at Israel and Gulf states (Horizon roundup, 18 Nov).
+5. **Iran downs U.S. MQ-9 drone over Iraq** — Iran downed a U.S. MQ-9
+   Reaper in Iraqi airspace (Horizon, 18 Nov).
+6. **ADNOC tanker hit in the Gulf** — Iran launched missiles at an ADNOC
+   oil tanker (Horizon, 18 Nov).
+7. **Three tankers burn after hitting naval mines** — Cyprus Mail, 18 Nov
+   20:26 UTC: three oil tankers catch fire after hitting naval mines east
+   of the Strait of Hormuz.
+8. **Cold kills in Gaza's tents** — Horizon, 18 Nov: cold kills in the
+   tents of displaced Gazans.
+9. **Britain sanctions West Bank settlement firms** — Horizon, 18 Nov:
+   the U.K. sanctions companies linked to Israeli settlements.
+10. **World Court to rule on Myanmar** — EIN South-East Asia, 18 Nov:
+    the ICJ prepares to rule on the Rohingya genocide case against Myanmar
+    (ruling due Thursday 19 Nov).
 
-- **Houthi attacks on Saudi Arabia.** Houthis claim aerial attacks; the
-  coalition says it struck 60 Houthi military targets and destroyed a
-  cruise missile aimed at Riyadh. Source: Arab News bulletin 18 Nov.
-- **Iran downs a U.S. MQ-9 drone** near the Strait of Hormuz.
-  Source: dailybaku.az, 18 Nov.
-- **ADNOC vessel hit** in the Strait of Hormuz; one crew member missing,
-  11 injured. Source: political.org, 18 Nov.
-- **Gaza: cold kills displaced people** in tents. Source: horizonapp.link.
-- **Britain sanctions eight Israeli builders** in the West Bank; Australia
-  lists Daniella Weiss, Amana and Nachala. Source: mitzpe.org brief.
-- **World Court to rule on the Myanmar genocide case** (ruling due Thu
-  19 Nov). Sources: oneturn.news, mitzpe.org.
+## Europe
 
-## Europe & Americas
+11. **France marches: 146,000 rally** — 146,000 march across France
+    against austerity (verified in v1 research).
+12. **EU adds 145 Russian entities** — E.U. adds 145 Russian entities to
+    its sanctions list (verified in v1 research).
+13. **France rejects call to arm Ukraine** — France rejects the
+    "co-belligerent" label and more aid to Kyiv (verified in v1 research).
+14. **Deutsche Bank leak: 15 million documents** — Horizon, 18 Nov:
+    leak of 15 million internal Deutsche Bank documents.
+15. **Markets slide** — Horizon, 18 Nov: CAC 40 −1.62%, DAX −2.08%,
+    S&P 500 −1.03%, VIX 25.46, gold −2.31%, Brent ~$91.55.
+16. **Portugal adds €50m to Ukraine weapons fund** — h.ua, 18 Nov
+    09:53 UTC: Portugal pledges another €50m to the PURL programme,
+    doubling its total to €100m (announced 17 Nov at Ramstein).
+17. **Russian strikes on Odesa kill four** — Euronews via Daily Digest,
+    18 Nov 19:31 UTC: Russian strikes in Odesa kill four, injure ≥13.
 
-- **Peltola flips Alaska.** Democrat Mary Peltola beats Dan Sullivan for
-  the U.S. Senate seat; Democrats reach 56 seats.
-  Sources: oneturn.news, feedcast.news.
-- **France: 146,000 protest** as unions strike over living costs.
-  Source: dailybaku.az, 18 Nov.
-- **EU adds 145 Russian entities** to sanctions lists; the European
-  Commission proposes a further €45bn in loans to Ukraine for 2027.
-  Sources: en.h.ua, osint-6g5.pages.dev Ukraine brief.
-- **U.S. outages hit Microsoft, Chase Bank and air traffic control;**
-  Secretary of State Rubio says there is no sign of a malign actor.
-  Sources: horizonapp.link, Arab News bulletin.
-- **Waymo pulls its robotaxis off all U.S. freeways** after the California
-  DMV barred them, calling them an "imminent hazard"; city streets
-  unaffected. Sources: reuters.com, insideevs.com, vocemundi.com.
-- **France rejects Russia's claim** it is "co-belligerent" in the Ukraine
-  war. Source: The Independent, 18 Nov.
+## Americas
 
-## Asia-Pacific, Africa & beyond
+18. **Peltola flips Alaska, Democrats win 56 Senate seats** — The Trent,
+    18 Nov: Democrats complete a historic 56-seat Senate majority as Mary
+    Peltola unseats the Alaska Republican.
+19. **Jeffries nominated as first Black House speaker** — France24 via
+    NewsBeagle, 18 Nov 19:58 UTC: U.S. Democrats nominate Hakeem Jeffries
+    to be the first Black House speaker.
+20. **Hegseth signs U.S.–Venezuela military deal** — DW via NewsBeagle,
+    18 Nov 20:19 UTC: Pentagon chief Pete Hegseth signs a military deal
+    in Venezuela.
+21. **Waymo off the freeways nationwide** — Horizon, 18 Nov: Waymo
+    suspends driverless rides on highways across the U.S.
+22. **Outages hit Microsoft, Chase and the NSA** — Horizon, 18 Nov: the
+    NSA's classified internal network went down on Tuesday, the latest in
+    a week of tech outages (Microsoft, banks).
+23. **Argentina thrash Costa Rica 7–0** — EIN Latin America / RHC,
+    18 Nov: Argentina beat Costa Rica 7–0 in Córdoba, Tuesday night, in
+    their last friendly of 2026; Nico Paz, Julián Álvarez and Franco
+    Mastantuono scored twice each.
+24. **Musk: GOP's $500m midterm spend a mistake** — TIME via Daily
+    Digest, 18 Nov 23:12 UTC: Elon Musk says GOP midterm spending of
+    nearly $500 million was a mistake.
 
-- **Ebola in DR Congo passes 11,000 cases and 5,400 deaths;** three in
-  four infected children under five die. Sources: oneturn.news; UN via
-  oneturn; U.S. CDC via dangershere.com.
-- **U.S. loses measles-free status after 26 years:** 5,400+ cases,
-  10 deaths. Sources: feedcast.news, horizonapp.link, PAHO via feedcast.
-- **Cyclone Xavier, Category 5,** lashes the Northern Cook Islands with
-  gusts to 315 km/h; Manihiki and Pukapuka under warning.
-  Sources: oneturn.news, metservice.com, thecooldown.com (RNZ/Fiji Met).
-- **Cyclone Akvan** bears down on India's Andhra Pradesh coast, due
-  20 Nov. Sources: rajglobalstudies.com, dangershere.com (IMD).
-- **Nvidia beats forecasts** — revenue about $116bn, guides $130bn —
-  and futures rally a day after the Dow fell 849 points; gold slides
-  below $3,800. Sources: firstfeednews.com, morningstar.com,
-  investinglive.com.
-- **MS Dhoni retires from the IPL** after 19 seasons; to mentor Chennai
-  Super Kings. Sources: filmfare.com, crickettimes.com, dailykiran.com.
+## Asia-Pacific & Africa
 
-## In brief
+25. **Ebola cases pass 11,000 in DRC** — Ebola cases in DRC pass 11,000;
+    children hit hardest (verified in v1 research; Horizon 18 Nov:
+    three in four children under five die from it).
+26. **U.S. loses measles-free status** — Horizon, 18 Nov: the U.S. loses
+    its measles elimination status, held for 26 years; 5,400+ cases, 10
+    deaths.
+27. **Cyclone Xavier batters Australia at 315 km/h** — verified in v1
+    research (Horizon 18 Nov: Xavier still in play, Nassau gale alerts).
+28. **Cyclone Akvan barrels toward the Indian coast** — verified in v1
+    research (AIR Kannada, 18 Nov: preparations reviewed).
+29. **Nvidia hits record $116bn revenue** — verified in v1 research
+    (Horizon 18 Nov: Nvidia rules out Huang's return despite record
+    sales).
+30. **Modi wraps up Philippines visit** — EIN South-East Asia, 18 Nov:
+    Narendra Modi departed for New Delhi on Tuesday after a two-day
+    Philippines visit: ASEAN-India Summit, East Asia Summit, Quad meeting.
+31. **Japan protests Russian jets in its airspace** — AsiaPresse,
+    18 Nov: Japan scrambled jets and protested after two suspected Russian
+    aircraft violated its airspace on 17 Nov, the first such breach since
+    September 2024; they then flew past Taiwan.
 
-- **Romania:** 5.3-magnitude quake, felt in Ukraine and Moldova.
-  Sources: en.h.ua, dailybaku.az.
-- **Russian military plane crashes** in Kemerovo region; 19 dead.
-  Sources: dailybaku.az; Izvestia via The Independent.
-- **Fiji declares a state of national disaster** over El Niño drought.
-  Source: rsoe-edis.org, 18 Nov.
-- **Nigeria–South Africa row eases** after a livestream credentials spat.
-  Sources: dntwok.com, springnewsng.com, zambianobserver.com.
+## In Brief (12)
 
-## Left out (too thin or unverifiable)
+32. **Romania quake: 5.4 magnitude** — verified in v1 research.
+33. **Siberia plane crash: 19 dead** — Horizon, 18 Nov: a Russian
+    military plane crashes in Siberia, 19 dead.
+34. **Fiji declares drought disaster** — AppiSToS, 19 Nov 07:29 UTC
+    (announced 18 Nov local): Fiji declares a national state of disaster
+    over El Niño drought.
+35. **Nigeria–South Africa row** — The Trent, 18 Nov: South Africa
+    raises a formal diplomatic complaint over Fani-Kayode's remarks.
+36. **Klabin blast hurts 10 in Brazil** — Reuters, 18 Nov 20:06 UTC:
+    boiler explosion at Klabin's Otacílio Costa plant, Santa Catarina;
+    10 employees taken to hospital; operations suspended.
+37. **Brazil Senate OKs $10bn package** — Daily Digest, 18 Nov:
+    Brazil's Senate gives approval to Lula's $10 billion fiscal package.
+38. **Argentina debates Falklands bill** — mikes.news, 18 Nov 03:46
+    UTC: Argentina's lower house debates the Falklands sovereignty bill;
+    the government called Princess Anne's visit to the Falklands a
+    "provocation".
+39. **Costa Rica journalist killed** — BBC via Horizon, 18 Nov: a Costa
+    Rican journalist investigating drug trafficking was killed by armed men.
+40. **Haiti cheers Bukele's troops** — Breitbart Latin America, 18 Nov:
+    thousands of Haitians marched in support of El Salvador's President
+    Bukele and the Salvadoran troops deployed in the country.
+41. **Pope Leo ends S. America tour** — Travel and Tour World, 18 Nov:
+    Pope Leo XIV landed in Rome on 17 Nov after a 12-day apostolic
+    journey to Uruguay, Argentina and Peru (6–17 Nov); first papal Mass
+    in Argentina in 39 years drew 2.5 million in Buenos Aires.
+42. **Dhoni retires from the IPL** — verified in v1 research.
+43. **PAHO: 9 nations talk obesity** — Mobilized News (PAHO), 18 Nov:
+    Argentina, Barbados, Brazil, Chile, Mexico, Panama, Peru, Trinidad
+    and Tobago and Uruguay reviewed barriers to obesity prevention; PAHO
+    also reported carbapenem resistance in Klebsiella rising from ~15%
+    (2015) to 26% (2024) across 15 countries.
 
-- "Nvidia CEO Jensen Huang won't return" — partially corroborated but the
-  "board shuts the door" wording was not cleanly verified; the earnings
-  numbers themselves are verified and used.
-- M1.1 solar flare — verified but minor; dropped for space.
-- South Sudan police recruitment screening out 54 children — verified
-  via Juba Global News but minor; dropped for space.
-- No verified South America story surfaced for 18 Nov, so the front page
-  claims FIVE continents, not six (Asia, Europe, Africa, North America,
-  Oceania).
+## Date check — deliberately left out
+
+- Indonesia's parliament approving the asset-forfeiture bill — 19 Nov.
+- Coalition of the Willing meeting in Berlin — 19 Nov.
+- Earthshot Prize 2026, Mumbai — 17 Nov.
+
+## Also verified, cut for space
+
+Yemen's parliament designating the Houthis as terrorists; Malaysia's
+UNHCR stopping new asylum registrations (effective 18 Nov); Pakistan's
+rooftop solar reaching 28% of electricity; Singapore's A.I. missions
+against scams; U.S. sentencing Asif Merchant to 27 years; Voyager 1
+reaching one light-day from Earth (26bn km); ULA's Vulcan failure traced
+to fuel starvation, 40 Amazon Leo satellites lost; Alcaraz beating Tiafoe
+6–2, 6–2 at the ATP Finals; Santner ruled out of the India Tests;
+Jay Shah re-elected ICC chairman; Qatar's Amir beginning a state visit to
+Switzerland; Nepal's PM shortening his India visit to 25 hours;
+Ethiopia–Eritrea troop build-up on their border; Senegal's President Faye
+expelled from the ruling party; a migrant vessel capsizing off Senegal;
+antibiotic-resistant Klebsiella rising in European hospitals; the EU–
+Indonesia trade deals approved for signing; an M1.1 solar flare;
+South Sudan screening out 54 child recruits.

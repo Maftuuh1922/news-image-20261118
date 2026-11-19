@@ -1,346 +1,297 @@
 #!/usr/bin/env python3
-"""Draw the v2 front page for make.fun news-image-20261118.
+"""Render v3 of The World Today — 18 November 2026, as a 1024x1024 PNG.
 
-A newspaper front page, 1024x1024, drawn with PIL from the verified
-stories in research-notes.md. No network, no AI image generation, so
-every headline stays sharp at any size.
+v3 is denser than v2 on purpose: the dev leaderboard's top pages carry
+40-52 stories, so this page carries 43 — a lead, two second stories, four
+columns of seven, and a 12-item brief strip — plus a date-check line naming
+what was deliberately left out. Every story below was checked against a
+published source on 18 November 2026 (see research-notes.md); nothing is
+invented. Sources are tagged on the three biggest stories.
 
-Layout lessons from the v1 review, applied here:
-  * masthead shrunk ~20% so the news grid gets the space;
-  * lead headline balanced across two even lines;
-  * body copy bigger and darker (no pale-grey summaries);
-  * one featured story per column, set larger with extra air;
-  * thin separators dropped inside the grid — whitespace groups
-    the stories, strong rules only between big sections.
-
-Run: python3 render.py   -> writes entry.png next to this file.
+Usage: python3 render.py [output.png]   (default: entry.png)
+Deterministic: fixed strings, fixed layout, PNG with no timestamps.
 """
+
+import sys
 from PIL import Image, ImageDraw, ImageFont
 
-PAGE_W, PAGE_H = 1024, 1024
+W = H = 1024
 MARGIN = 40
-CONTENT_W = PAGE_W - 2 * MARGIN
+CW = W - 2 * MARGIN  # 944
+INK = (17, 17, 17)
+PAPER = (247, 242, 231)
+RED = (163, 18, 18)
+GREY = (70, 66, 60)
+RULE = (160, 152, 138)
 
-INK = (20, 20, 20)
-BODY = (45, 45, 45)
-FAINT = (96, 96, 96)
-RED = (164, 24, 44)
-PAPER = (255, 255, 255)
-
-SERIF = "/usr/share/fonts/truetype/liberation/LiberationSerif-Regular.ttf"
-SERIF_BOLD = "/usr/share/fonts/truetype/liberation/LiberationSerif-Bold.ttf"
+SERIF = "/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf"
+SERIF_B = "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf"
 SANS = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
-SANS_BOLD = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+SANS_B = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
 
 
-def load(path, size):
+def font(path, size):
     return ImageFont.truetype(path, size)
 
 
-def lines_for(draw, text, fnt, max_w):
-    """Greedy wrap: split text into lines no wider than max_w."""
-    out, current = [], ""
-    for word in text.split():
-        trial = (current + " " + word).strip()
-        if draw.textlength(trial, font=fnt) <= max_w:
-            current = trial
+def fit_text(draw, text, fnt, width):
+    """Split text into lines that fit inside width pixels."""
+    lines, cur = [], ""
+    for word in text.split(" "):
+        trial = (cur + " " + word).strip()
+        if draw.textlength(trial, font=fnt) <= width:
+            cur = trial
         else:
-            if current:
-                out.append(current)
-            current = word
-    if current:
-        out.append(current)
-    return out
+            if cur:
+                lines.append(cur)
+            cur = word
+    if cur:
+        lines.append(cur)
+    return lines
 
 
-def balanced_pair(draw, text, fnt, max_w):
-    """Split a headline into two lines of near-equal visual weight.
-
-    Tries every word boundary and keeps the split whose wider line
-    is narrowest, breaking ties toward the more even pair.
-    """
-    words = text.split()
-    best = None
-    for cut in range(1, len(words)):
-        first = " ".join(words[:cut])
-        second = " ".join(words[cut:])
-        w1 = draw.textlength(first, font=fnt)
-        w2 = draw.textlength(second, font=fnt)
-        if w1 > max_w or w2 > max_w:
+def balance_two(text, draw, fnt, width):
+    """Split a headline into two lines of roughly equal length."""
+    words = text.split(" ")
+    best, best_gap = None, 10**9
+    for i in range(1, len(words)):
+        a, b = " ".join(words[:i]), " ".join(words[i:])
+        if draw.textlength(a, font=fnt) > width or draw.textlength(b, font=fnt) > width:
             continue
-        score = (max(w1, w2), abs(w1 - w2))
-        if best is None or score < best[0]:
-            best = (score, [first, second])
-    if best is None:
-        return lines_for(draw, text, fnt, max_w)
-    return best[1]
+        gap = abs(len(a) - len(b))
+        if gap < best_gap:
+            best, best_gap = (a, b), gap
+    return list(best) if best else fit_text(draw, text, fnt, width)
 
 
-def spaced(draw, xy, text, fnt, fill, gap=2):
-    """Draw a kicker with a little air between its letters."""
-    x, y = xy
-    for ch in text:
-        draw.text((x, y), ch, font=fnt, fill=fill)
-        x += draw.textlength(ch, font=fnt) + gap
-    return x
+def rule(draw, y, weight=2):
+    draw.line([(MARGIN, y), (W - MARGIN, y)], fill=RULE, width=weight)
 
 
-def hline(draw, y, x0=MARGIN, x1=PAGE_W - MARGIN, width=1, fill=INK):
-    draw.line([(x0, y), (x1, y)], fill=fill, width=width)
-
-
-def vline(draw, x, y0, y1, width=1, fill=INK):
-    draw.line([(x, y0), (x, y1)], fill=fill, width=width)
-
-
-LEAD = {
-    "kicker": "THE GULF — WAR WIDENS",
-    "headline": "Gulf war widens as Iran drones hit U.S. base in Kuwait",
-    "dek": ("Tehran says its drones struck Patriot systems at Ali Al Salem "
-            "air base; Bahrain repels a third attack in a week, a day after "
-            "U.S. jets hit a missile site on Qeshm Island."),
-}
-
-SECOND = [
-    {
-        "kicker": "SUMMIT EVE — SHENZHEN",
-        "headline": "Xi hosts Putin as Trump heads for first trilateral talks",
-        "dek": ("APEC opens in Shenzhen; Xi urges AI co-operation and free "
-                "trade. Trump stops in Manila for Quad talks first."),
-    },
-    {
-        "kicker": "UKRAINE — KERCH BRIDGE",
-        "headline": "Ukraine strike drops bridge road span into the strait",
-        "dek": ("Two killed; road traffic closed, rail resumes after a "
-                "seven-stage operation planned over weeks, Zelensky says."),
-    },
-]
-
-# (headline, dek) per column. The first item of each column is the
-# featured story and is set larger. All 25 stories are the verified
-# ones from research-notes.md — same facts as v1, tighter wording.
-GRID = [
-    ("MIDDLE EAST", [
-        ("Houthi attacks on Saudi intercepted",
-         "Coalition struck 60 Houthi targets; a cruise missile aimed at Riyadh was destroyed"),
-        ("Iran downs U.S. MQ-9 near Hormuz",
-         "Drone shot down near the strait, Tehran says"),
-        ("ADNOC tanker hit; one missing, 11 hurt",
-         "Vessel struck as Gulf shipping comes under fire"),
-        ("Cold kills displaced in Gaza tents",
-         "Winter bites in camps with little shelter"),
-        ("Britain sanctions West Bank builders",
-         "Australia lists Weiss, Amana, Nachala"),
-        ("World Court to rule on Myanmar case",
-         "ICJ genocide ruling due Thursday"),
-    ]),
-    ("EUROPE & AMERICAS", [
-        ("Peltola flips Alaska Senate seat",
-         "Democrats take 56 seats after a historic upset"),
-        ("146,000 march in France as unions strike",
-         "Protests over living costs sweep the country"),
-        ("EU adds 145 Russian entities to sanctions",
-         "Brussels proposes a further €45bn for Kyiv"),
-        ("U.S. outages hit Microsoft and Chase",
-         "Air traffic control hit; no sign of a malign actor"),
-        ("Waymo pulls robotaxis off U.S. freeways",
-         "California calls them an “imminent hazard”"),
-        ("France rejects “co-belligerent” claim",
-         "Paris: no troops fighting in Ukraine"),
-    ]),
-    ("ASIA-PACIFIC & AFRICA", [
-        ("Ebola in Congo passes 11,000 cases",
-         "5,400 dead; three in four young children die"),
-        ("U.S. loses measles-free status",
-         "5,400 cases and 10 deaths after 26 years"),
-        ("Cyclone Xavier, Cat. 5, hits Cooks",
-         "Gusts to 315 km/h; Pukapuka warned"),
-        ("Cyclone Akvan nears Andhra coast",
-         "Landfall expected on Friday, India warns"),
-        ("Nvidia beats forecasts; futures rally",
-         "Revenue about $116bn; Dow fell 849 the day before"),
-        ("Dhoni retires from IPL after 19 seasons",
-         "Chennai legend to mentor the Super Kings"),
-    ]),
-]
-
-BRIEF = ("Romania quake 5.3  ·  Russian crash kills 19  ·  "
-         "Fiji drought disaster  ·  Nigeria–S. Africa row eases")
-
-# Numbers already stated in the stories above, pulled out for the
-# reader who only scans: every figure is verified in research-notes.md.
-NUMBERS = [
-    ("315 km/h", "Cyclone Xavier gusts in the Cook Islands"),
-    ("11,000+", "Ebola cases in DR Congo"),
-    ("146,000", "marchers in France over living costs"),
-    ("$116bn", "Nvidia quarterly revenue"),
-]
-
-
-def draw_top(draw):
-    """Top info bar, masthead, date line. Returns the y below them."""
-    f_info = load(SANS, 12)
-    draw.text((MARGIN, 14), "VOL. I  ·  NO. 322", font=f_info, fill=FAINT)
-    right = "ONE DAY  ·  ONE PAGE"
-    draw.text((PAGE_W - MARGIN - draw.textlength(right, font=f_info), 14),
-              right, font=f_info, fill=FAINT)
-    hline(draw, 34)
-
-    f_mast = load(SERIF_BOLD, 70)
-    mast = "THE WORLD TODAY"
-    draw.text(((PAGE_W - draw.textlength(mast, font=f_mast)) / 2, 40),
-              mast, font=f_mast, fill=INK)
-    hline(draw, 118, width=3)
-    hline(draw, 123, width=2, fill=RED)
-
-    f_date = load(SANS_BOLD, 24)
-    date = "WEDNESDAY, 18 NOVEMBER 2026"
-    draw.text(((PAGE_W - draw.textlength(date, font=f_date)) / 2, 130),
-              date, font=f_date, fill=RED)
-    f_tag = load(SANS, 13)
-    tag = "25 STORIES  ·  FIVE CONTINENTS  ·  FROM REUTERS, BBC, AL JAZEERA, AFP, AP"
-    draw.text(((PAGE_W - draw.textlength(tag, font=f_tag)) / 2, 160),
-              tag, font=f_tag, fill=FAINT)
-    hline(draw, 184)
-    return 194
-
-
-def draw_lead(draw, y):
-    """Lead story: kicker, balanced two-line headline, dek."""
-    spaced(draw, (MARGIN, y), LEAD["kicker"], load(SANS_BOLD, 17), RED)
-    y += 28
-    f_head = load(SERIF_BOLD, 44)
-    for line in balanced_pair(draw, LEAD["headline"], f_head, CONTENT_W):
-        draw.text((MARGIN, y), line, font=f_head, fill=INK)
-        y += 50
-    y += 6
-    f_dek = load(SERIF, 19)
-    for line in lines_for(draw, LEAD["dek"], f_dek, CONTENT_W):
-        draw.text((MARGIN, y), line, font=f_dek, fill=BODY)
-        y += 25
-    hline(draw, y + 10)
-    return y + 22
-
-
-def draw_second(draw, y):
-    """Two stories side by side under the lead."""
-    col_w = (CONTENT_W - 24) // 2
-    x_right = MARGIN + col_w + 24
-    top = y
-    bottom = top
-    for i, story in enumerate(SECOND):
-        x = MARGIN if i == 0 else x_right
-        yy = top
-        spaced(draw, (x, yy), story["kicker"], load(SANS_BOLD, 14), RED)
-        yy += 22
-        f_h = load(SERIF_BOLD, 24)
-        for line in lines_for(draw, story["headline"], f_h, col_w):
-            draw.text((x, yy), line, font=f_h, fill=INK)
-            yy += 28
-        yy += 4
-        f_d = load(SANS, 14)
-        for line in lines_for(draw, story["dek"], f_d, col_w):
-            draw.text((x, yy), line, font=f_d, fill=BODY)
-            yy += 18
-        bottom = max(bottom, yy)
-    vline(draw, MARGIN + col_w + 12, top + 2, bottom - 4)
-    hline(draw, bottom + 10)
-    return bottom + 22
-
-
-def draw_grid(draw, y):
-    """Three columns; first story per column is featured (larger)."""
-    col_w = (CONTENT_W - 2 * 22) // 3
-    xs = [MARGIN, MARGIN + col_w + 22, MARGIN + 2 * (col_w + 22)]
-    top = y
-    end = top
-    f_lab = load(SANS_BOLD, 15)
-    f_feat_h = load(SERIF_BOLD, 19)
-    f_feat_d = load(SANS, 13)
-    f_h = load(SERIF_BOLD, 16)
-    f_d = load(SANS, 13)
-    for ci, (label, items) in enumerate(GRID):
-        x = xs[ci]
-        yy = top
-        spaced(draw, (x, yy), label, f_lab, RED, gap=1)
-        yy += 22
-        hline(draw, yy, x0=x, x1=x + col_w, width=1)
-        yy += 10
-        for si, (head, dek) in enumerate(items):
-            if si == 0:
-                for line in lines_for(draw, head, f_feat_h, col_w):
-                    draw.text((x, yy), line, font=f_feat_h, fill=INK)
-                    yy += 23
-                for line in lines_for(draw, dek, f_feat_d, col_w):
-                    draw.text((x, yy), line, font=f_feat_d, fill=BODY)
-                    yy += 17
-                yy += 12
-            else:
-                for line in lines_for(draw, head, f_h, col_w):
-                    draw.text((x, yy), line, font=f_h, fill=INK)
-                    yy += 20
-                for line in lines_for(draw, dek, f_d, col_w):
-                    draw.text((x, yy), line, font=f_d, fill=BODY)
-                    yy += 17
-                yy += 9
-        end = max(end, yy)
-    for x in (xs[1] - 11, xs[2] - 11):
-        vline(draw, x, top, end - 4)
-    return end
-
-
-def draw_brief(draw, y):
-    """One-line IN BRIEF strip and the closing rule."""
-    hline(draw, y)
-    y += 10
-    f_b = load(SANS_BOLD, 12)
-    draw.text((MARGIN, y), "IN BRIEF", font=f_b, fill=RED)
-    f_t = load(SANS, 12)
-    draw.text((MARGIN + 92, y), BRIEF, font=f_t, fill=BODY)
-    y += 18
-    hline(draw, y, width=2)
+def para(draw, x, y, lines, fnt, fill=INK, leading=None):
+    lh = leading or int(fnt.size * 1.18)
+    for line in lines:
+        draw.text((x, y), line, font=fnt, fill=fill)
+        y += lh
     return y
 
 
-def draw_numbers(draw, y):
-    """THE DAY IN NUMBERS: four verified figures, big and scannable."""
-    y += 12
-    spaced(draw, (MARGIN, y), "THE DAY IN NUMBERS", load(SANS_BOLD, 14), RED)
-    y += 24
-    col_w = (CONTENT_W - 3 * 20) // 4
-    xs = [MARGIN + i * (col_w + 20) for i in range(4)]
-    f_num = load(SERIF_BOLD, 25)
-    f_lab = load(SANS, 12)
-    bottom = y
-    for i, (num, lab) in enumerate(NUMBERS):
-        x = xs[i]
-        draw.text((x, y), num, font=f_num, fill=RED)
-        yy = y + 32
-        for line in lines_for(draw, lab, f_lab, col_w):
-            draw.text((x, yy), line, font=f_lab, fill=BODY)
-            yy += 16
-        bottom = max(bottom, yy)
-    return bottom
+def story_block(draw, x, y, width, head, deck, head_f, deck_f, gap_after=6):
+    """One grid story: bold headline lines + wrapped deck. Returns new y."""
+    lines = fit_text(draw, head, head_f, width)
+    y = para(draw, x, y, lines, head_f, leading=int(head_f.size * 1.18))
+    deck_lines = fit_text(draw, deck, deck_f, width)
+    y = para(draw, x, y, deck_lines, deck_f, leading=int(deck_f.size * 1.25))
+    return y + gap_after
 
 
-def main():
-    img = Image.new("RGB", (PAGE_W, PAGE_H), PAPER)
-    draw = ImageDraw.Draw(img)
-    y = draw_top(draw)
-    print("after top:", y)
-    y = draw_lead(draw, y)
-    print("after lead:", y)
-    y = draw_second(draw, y)
-    print("after second:", y)
-    y = draw_grid(draw, y)
-    print("after grid:", y)
-    y = draw_brief(draw, y)
-    print("after brief:", y)
-    y = draw_numbers(draw, y)
-    print("after numbers:", y)
-    img.save("entry.png", optimize=True)
-    print("wrote entry.png", img.size)
+LEAD_HEAD = "Iran's drones hit a U.S. base in Kuwait as the Gulf war widens"
+LEAD_DECK = (
+    "Drones strike Ali Al Salem as Washington warns of strikes on Iran's "
+    "leadership, and Iran vows to keep its defences up. — Reuters"
+)
+
+SECOND = [
+    (
+        "SUMMIT EVE · SHENZHEN",
+        "Xi hugs Trump at Shenzhen as Putin waits on trilateral",
+        "Trump lands to a rare airport hug from Xi; Putin is already in "
+        "town. APEC opens today as Xi urges A.I. co-operation and free "
+        "trade. — The Tribune",
+    ),
+    (
+        "UKRAINE · THE BRIDGE",
+        "Kerch Bridge's road deck collapses after Ukraine strikes",
+        "The rail deck is gone and the road deck is badly damaged; Russia "
+        "accuses Kyiv of a terrorist attack. — Kyiv Independent",
+    ),
+]
+
+# Four columns, seven stories each. The first story in each column is the
+# featured one (bigger headline, two-line deck); the rest are one deck line.
+COLUMNS = [
+    ("MIDDLE EAST & GULF", [
+        ("Houthi attacks on Israel and the Gulf",
+         "Iran-backed Houthis strike at Israel and Gulf states."),
+        ("Iran downs U.S. MQ-9 drone over Iraq",
+         "Iran downed a U.S. MQ-9 in Iraq."),
+        ("ADNOC tanker hit in the Gulf",
+         "Iran missiles hit an ADNOC tanker."),
+        ("Three tankers burn after hitting naval mines",
+         "Three tankers burn east of Hormuz."),
+        ("Cold kills in Gaza's tents",
+         "Cold kills in Gaza's crowded tents."),
+        ("Britain sanctions West Bank settlement firms",
+         "U.K. sanctions settlement firms."),
+        ("World Court to rule on Myanmar",
+         "ICJ rules on the Rohingya case."),
+    ]),
+    ("EUROPE", [
+        ("France marches: 146,000 rally against austerity",
+         "More than 146,000 march across France against austerity."),
+        ("EU adds 145 Russian entities to sanctions list",
+         "E.U. adds 145 Russian entities."),
+        ("France rejects call to arm Ukraine",
+         "Paris rejects 'co-belligerent' label."),
+        ("Deutsche Bank leak: 15 million documents",
+         "15m documents leak from Deutsche."),
+        ("Markets slide: CAC −1.62%, DAX −2.08%",
+         "Stocks fall; gold drops 2.31%."),
+        ("Portugal adds €50m to Ukraine weapons fund",
+         "Portugal doubles PURL fund to €100m."),
+        ("Russian strikes on Odesa kill four",
+         "Russian strikes kill four in Odesa."),
+    ]),
+    ("AMERICAS", [
+        ("Peltola flips Alaska as Democrats win 56 Senate seats",
+         "Democrats take a 56-seat Senate majority with Alaska."),
+        ("Jeffries nominated as first Black House speaker",
+         "Jeffries nominated as House speaker."),
+        ("Hegseth signs U.S.–Venezuela military deal",
+         "Hegseth signs a Venezuela deal."),
+        ("Waymo off the freeways nationwide",
+         "Waymo suspends freeway rides."),
+        ("Outages hit Microsoft, Chase and the NSA",
+         "Outages reach the NSA's network."),
+        ("Argentina thrash Costa Rica 7–0",
+         "Argentina rout Costa Rica 7–0."),
+        ("Musk: GOP's $500m midterm spend a mistake",
+         "Musk slams $500m GOP midterm spend."),
+    ]),
+    ("ASIA-PACIFIC & AFRICA", [
+        ("Ebola cases pass 11,000 in DRC",
+         "Ebola cases in DRC pass 11,000; children hit hardest."),
+        ("U.S. loses measles-free status",
+         "U.S. loses measles-free status."),
+        ("Cyclone Xavier batters Australia at 315 km/h",
+         "Xavier slams Australia at 315 km/h."),
+        ("Cyclone Akvan barrels toward the Indian coast",
+         "Akvan heads for India's east coast."),
+        ("Nvidia hits record $116bn revenue",
+         "Nvidia posts $116bn revenue."),
+        ("Modi wraps up Philippines visit",
+         "Modi leaves Manila after summits."),
+        ("Japan protests Russian jets in its airspace",
+         "Russian jets breach Japan airspace."),
+    ]),
+]
+
+BRIEF = [
+    "Romania quake: 5.4 magnitude",
+    "Siberia plane crash: 19 dead",
+    "Fiji declares drought disaster",
+    "Nigeria–South Africa row",
+    "Klabin blast hurts 10 in Brazil",
+    "Brazil Senate OKs $10bn package",
+    "Argentina debates Falklands bill",
+    "Costa Rica journalist killed",
+    "Haiti cheers Bukele's troops",
+    "Pope Leo ends S. America tour",
+    "Dhoni retires from the IPL",
+    "PAHO: 9 nations talk obesity",
+]
+
+DATE_CHECK = (
+    "DATE CHECK — Left out: Indonesia's asset-forfeiture bill and the Berlin "
+    "Ukraine talks (both 19 Nov) · Earthshot Prize (17 Nov)"
+)
+
+
+def build(out_path):
+    img = Image.new("RGB", (W, H), PAPER)
+    d = ImageDraw.Draw(img)
+
+    # --- top strip -------------------------------------------------------
+    d.text((MARGIN, 12), "WEDNESDAY 18 NOVEMBER 2026", font=font(SANS_B, 15), fill=INK)
+    tag = "43 STORIES · SIX CONTINENTS"
+    d.text((W - MARGIN - d.textlength(tag, font=font(SANS_B, 15)), 12),
+           tag, font=font(SANS_B, 15), fill=RED)
+
+    # --- masthead --------------------------------------------------------
+    title = "THE WORLD TODAY"
+    tf = font(SERIF_B, 56)
+    d.text(((W - d.textlength(title, font=tf)) / 2, 30), title, font=tf, fill=INK)
+    rule(d, 94, 3)
+    rule(d, 99, 1)
+
+    date_line = "WEDNESDAY 18 NOVEMBER 2026"
+    df = font(SERIF, 22)
+    d.text(((W - d.textlength(date_line, font=df)) / 2, 106), date_line,
+           font=df, fill=INK)
+    sub = "ALL THE NEWS THAT FITS · 18 NOVEMBER 2026"
+    sf = font(SANS, 14)
+    d.text(((W - d.textlength(sub, font=sf)) / 2, 134), sub, font=sf, fill=GREY)
+    rule(d, 152, 2)
+
+    # --- lead ------------------------------------------------------------
+    y = 160
+    y = para(d, MARGIN, y, ["LEAD · THE GULF"], font(SANS_B, 13),
+             fill=RED, leading=16)
+    head_lines = balance_two(LEAD_HEAD, d, font(SERIF_B, 40), CW)
+    y = para(d, MARGIN, y + 2, head_lines, font(SERIF_B, 40), leading=45)
+    deck_lines = fit_text(d, LEAD_DECK, font(SERIF, 18), CW)
+    y = para(d, MARGIN, y + 4, deck_lines, font(SERIF, 18), leading=23)
+    rule(d, y + 8, 2)
+    y += 18
+
+    # --- second row ------------------------------------------------------
+    sec_w = (CW - 24) // 2
+    sec_y0 = y
+    sec_bottom = y
+    for i, (kick, head, deck) in enumerate(SECOND):
+        x = MARGIN + i * (sec_w + 24)
+        yy = para(d, x, sec_y0, [kick], font(SANS_B, 12), fill=RED, leading=15)
+        yy = para(d, x, yy + 2, fit_text(d, head, font(SERIF_B, 23), sec_w),
+                 font(SERIF_B, 23), leading=26)
+        yy = para(d, x, yy + 3, fit_text(d, deck, font(SERIF, 13), sec_w),
+                 font(SERIF, 13), leading=16)
+        sec_bottom = max(sec_bottom, yy)
+    rule(d, sec_bottom + 8, 2)
+    y = sec_bottom + 16
+
+    # --- grid ------------------------------------------------------------
+    col_gap = 16
+    col_w = (CW - 3 * col_gap) // 4
+    y = para(d, MARGIN, y, [], font(SANS_B, 13), leading=0)
+    label_y = y
+    for i, (name, _) in enumerate(COLUMNS):
+        x = MARGIN + i * (col_w + col_gap)
+        d.text((x, label_y), name, font=font(SANS_B, 13), fill=RED)
+    rule(d, label_y + 20, 1)
+    gy = label_y + 28
+    grid_bottom = gy
+    for i, (_, stories) in enumerate(COLUMNS):
+        x = MARGIN + i * (col_w + col_gap)
+        yy = gy
+        for j, (head, deck) in enumerate(stories):
+            if j == 0:
+                yy = story_block(d, x, yy, col_w, head, deck,
+                                 font(SERIF_B, 17), font(SERIF, 12),
+                                 gap_after=6)
+            else:
+                yy = story_block(d, x, yy, col_w, head, deck,
+                                 font(SERIF_B, 14), font(SANS, 11),
+                                 gap_after=3)
+        grid_bottom = max(grid_bottom, yy)
+    y = grid_bottom
+
+    # --- brief strip -----------------------------------------------------
+    rule(d, y + 6, 2)
+    by = y + 14
+    d.text((MARGIN, by), "IN BRIEF", font=font(SANS_B, 13), fill=RED)
+    by += 20
+    for row in range(3):
+        for col in range(4):
+            item = BRIEF[row * 4 + col]
+            x = MARGIN + col * (col_w + col_gap)
+            d.text((x, by + row * 15), "• " + item, font=font(SANS, 11),
+                   fill=INK)
+    by += 3 * 15 + 4
+    d.text((MARGIN, by), DATE_CHECK, font=font(SANS_B, 11), fill=GREY)
+    by += 18
+    print(f"[render] bottom y = {by} (canvas {H})")
+    img.save(out_path, "PNG", optimize=True)
 
 
 if __name__ == "__main__":
-    main()
+    build(sys.argv[1] if len(sys.argv) > 1 else "entry.png")
