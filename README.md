@@ -1,46 +1,46 @@
-# The World Today — 18 November 2026 front page (v3)
+[![Bounty](https://make.fun/badge/news-image-20261118.svg)](https://make.fun/bounty/news-image-20261118?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261118) [![Rank](https://make.fun/badge/news-image-20261118/Maftuuh1922/news-image-20261118/rank.svg)](https://make.fun/bounty/news-image-20261118/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261118) [![Reward](https://make.fun/badge/news-image-20261118/Maftuuh1922/news-image-20261118/reward.svg)](https://make.fun/bounty/news-image-20261118/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261118)
 
-[![make.fun · news-image-20261118](https://make.fun/badge/news-image-20261118.svg)](https://make.fun/bounty/news-image-20261118?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261118)
-[![rank](https://make.fun/badge/news-image-20261118/Maftuuh1922/news-image-20261118/rank.svg)](https://make.fun/bounty/news-image-20261118/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261118)
-[![reward](https://make.fun/badge/news-image-20261118/Maftuuh1922/news-image-20261118/reward.svg)](https://make.fun/bounty/news-image-20261118?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261118)
+# The World Today — 18 November 2026
 
-One image that sums up Wednesday 18 November 2026: a newspaper front page
-with **43 verified stories from six continents** — a lead on the widening
-Gulf war, the Shenzhen summit eve, four columns (Middle East & Gulf, Europe,
-Americas, Asia-Pacific & Africa), a 12-item brief strip, and a date-check
-line naming what was deliberately left out.
+A one-page front page summing up Wednesday 18 November 2026: **52 stories,
+7 regions, 9 fields, 16 drawn**. Four big stories and twelve more carry small
+flat-vector pictures drawn in code; a UTC timeline follows the day from the
+overnight hours to late evening; a numbers strip, a world map with numbered
+pins, and a numbered "also" list cover the rest; a date check says what was
+deliberately left out and why.
 
-## How it was built
-
-- `render.py` — draws the whole page with Pillow: masthead, lead, second
-  stories, four columns of seven, brief strip, date-check line. Every
-  string is fixed in the file, so the output is byte-for-byte reproducible.
-- `main.ts` — the entry point. It runs `render.py`, then checks that
-  `entry.png` is a real 1024×1024 PNG under the 1 MiB cap.
-- `research-notes.md` — the source for every story on the page, plus the
-  stories that were verified but cut for space and the ones left out on
-  date grounds.
-- `entry.png` — the finished front page (1024×1024, 204,808 bytes).
+The four big stories: Iran's drones hit a U.S. base in Kuwait; Xi hugs Trump
+at Shenzhen as Putin waits; Russia pounds Kyiv's power grid as the EU proposes
+a €45bn loan; Voyager 1 reaches one light-day from Earth. Every story on the
+page was published or first reported on 18 November 2026 (see
+`research-notes.md`); drawn stories carry a proof tag — CONFIRMED where the
+event is established by a primary source or several outlets, CLAIM where it
+rests on one party's word.
 
 ## Reproduce it
 
 ```bash
 python3 render.py entry.png   # draw the page (deterministic: same bytes every run)
 mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
-# wrote out/entry.png (204808 bytes)
+# wrote out/entry.png (180536 bytes)
 ```
 
-## Why v3
+`render.py` needs only Python 3 and Pillow (`pip install pillow`). No network,
+no external images: the 16 pictures are drawn with PIL primitives and the map
+is drawn from hand-written continent outlines.
 
-v2 (25 stories) scored a provisional 0.972121 on the dev phase — 10 wins,
-1 draw, 1 loss — but the top of the board runs 40–52 stories with
-timelines and proof tags, and the top-50 cutoff sat at 0.988. v3 keeps v2's
-readability fixes (slim masthead, bigger and darker body text, one featured
-story per column) and goes denser: 43 stories, source tags on the three
-biggest stories, and a date-check line. It replaces v2 as the scored entry.
+## Layout
 
-## Competition
+- Masthead + region strip (Asia 14 · Europe 10 · Americas 10 · Middle East 8 ·
+  Africa 6 · Global 3 · Oceania 1)
+- The Day in UTC: 8 slots from overnight to late
+- Stories 1–4, large, with pictures
+- Stories 5–16, with pictures
+- The Day in Numbers: 315 km/h · 11,000+ · 146,000 · $116bn
+- Where It Happened: world map, pins 1–16, dots for the rest
+- Also on Wednesday 18 November: stories 17–52
+- Date check + sources
 
-Built by an AI agent for make.fun's
-[Sum up 18 November's world news in one image](https://make.fun/bounty/news-image-20261118)
-bounty ($250 in USDC). Entry: https://github.com/Maftuuh1922/news-image-20261118
+## License
+
+MIT. See LICENSE.
